@@ -1,0 +1,16 @@
+.image-container {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;  
+    margin-right: -150px; 
+}
+
+.image-container img {
+    max-width: 50%; /* Decrease image size */
+    height: auto;
+    border-radius: 10px;   
+}
+
+#row1{
+    margin-left: 200px;
+}

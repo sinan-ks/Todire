@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Manage your tasks efficiently with Todire Todo List.">
+    <title>Todo List - Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/task_list.css' %}">
+    <script src="https://kit.fontawesome.com/252a556f38.js" crossorigin="anonymous"></script>
+
+</head>
+
+<style>
+    .task-completed {
+        text-decoration: line-through;
+    }
+</style>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand text-warning fw-bolder" href="#"><i
+                    class="fa-solid fa-bangladeshi-taka-sign text-black"></i>
+                <b>Todire</b></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav me-auto">
+                    <a class="nav-link active fw-bolder" href="{% url 'task-list' %}"><i
+                            class="fa-solid fa-list-check text-danger"></i> View Tasks</a>
+                </div>
+                <div class="navbar-nav">
+                    <a class="navbar-brand text-success-emphasis fw-bolder" href="#"><i
+                            class="fa-solid fa-circle-user text-primary"></i>
+                        {{ request.user }}</a>
+                    <a class="btn btn-light nav-link fw-bolder btn-logout" href="{% url 'signout' %}"><i
+                            class="fa-solid fa-right-from-bracket"></i> <b>Logout</b></a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    {% if messages %}
+    {% for m in messages %}
+    <div class="d-flex justify-content-center mt-5">
+        <div class="alert alert-warning alert-dismissible fade show w-40" role="alert">
+            <strong>{{ m }}</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <div class="container text-center mt-4">
+        <h1 class="fw-bolder">Welcome to Your Todo List</h1>
+        <a class="btn btn-warning fw-bold mt-2" href="{% url 'task-add' %}"><i class="fa-solid fa-plus"></i> Add
+            Tasks</a>
+    </div>
+
+    <div class="container text-center mt-4">
+        <div class="row">
+            <div class="col-md-3">
+                <a href="{% url 'task-list' %}" class="text-decoration-none">
+                    <div class="border mb-3 text-capitalize p-1 rounded alert alert-secondary">
+                        <h6><b>All Tasks: {{ all_count }}</b></h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a href="?status=pending" class="text-decoration-none">
+                    <div class="border mb-3 text-capitalize p-1 rounded alert alert-warning">
+                        <h6><b>Pending Tasks: {{ pending_count }}</b></h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a href="?status=completed" class="text-decoration-none">
+                    <div class="border mb-3 text-capitalize p-1 rounded alert alert-success">
+                        <h6><b>Completed Tasks: {{ completed_count }}</b></h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a href="?status=in_progress" class="text-decoration-none">
+                    <div class="border mb-3 text-capitalize p-1 rounded alert alert-primary">
+                        <h6><b>In-Progress Tasks: {{ in_progress_count }}</b></h6>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-4">
+        {% for t in data %}
+        <div class="row mb-2">
+            <div class="col-12 col-md-8 offset-md-2 border rounded-pill p-3 shadow bg-white">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        {% if t.status == 'completed' %}
+                        <i class="fa-solid fa-check text-success"></i>
+                        {% elif t.status == 'pending' %}
+                        <i class="fa-solid fa-exclamation-triangle text-warning"></i>
+                        {% elif t.status == 'in_progress' %}
+                        <i class="fa-solid fa-spinner text-primary"></i>
+                        {% endif %}
+                        <span class="{% if t.status == 'completed' %}task-completed{% endif %}"><b>Title:</b>
+                            {{t.title}}</span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <b class="me-1">Status:</b>
+                        <span
+                            class="text-capitalize {% if t.status == 'completed' %}text-success{% elif t.status == 'pending' %}text-danger{% elif t.status == 'in_progress' %}text-primary{% endif %}">
+                            {{ t.status }}
+                        </span>
+                    </div>
+                    <div>
+                        <a href="{% url 'task-detail' t.id %}"
+                            class="text-decoration-none text-primary pe-2 fw-bolder"><i
+                                class="fa-solid fa-eye p-1 text-primary"></i></a>
+                        <a href="{% url 'task-edit' t.id %}"
+                            class="text-decoration-none text-secondary pe-2 fw-bolder"><i
+                                class="fa-solid fa-pen-to-square p-1 text-secondary"></i></a>
+                        <a href="{% url 'task-delete' t.id %}" class="text-decoration-none text-danger fw-bolder"><i
+                                class="fa-sharp fa-solid fa-trash p-1 text-danger"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+</body>
+
+</html>

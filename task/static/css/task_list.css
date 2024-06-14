@@ -1,0 +1,24 @@
+.navbar{
+    background-color: #0093E9;
+    background-image: linear-gradient(160deg, #0093E9 0%, #80D0C7 100%);
+}
+
+body{
+    background-color: #8EC5FC;
+    background-image: linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%);
+    background-repeat: no-repeat;
+    background-size: 100% 900px;
+}
+
+.btn-logout {
+    color: #dc3545 !important;
+    border: 1px solid #dc3545 !important;
+    
+}
+
+.btn-logout:hover {
+    color: #fff !important;
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+}
+
